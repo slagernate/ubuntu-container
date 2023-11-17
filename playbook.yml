@@ -12,9 +12,27 @@
     ansible.builtin.apt_repository:
       repo: ppa:deadsnakes/ppa
 
-  - name: Install lattice radiant dependencies
+  - name: Install software dependencies
     ansible.builtin.apt:
-      name: [ "at-spi2-core", "libpangocairo-1.0-0", "libcairo2-dev", "pulseaudio", "libc6", "libjpeg-dev", "libieee1284-3", "libusb-0.1-4", "lsb-base", "libnss3", "libice6", "libgl1-mesa-glx", "libsm6", "libxt6", "libxext6", "libxrender1", "libxi6", "libxft2", "libxslt1.1", "libxrandr2", "libxfixes3", "libxdamage1", "libxcursor1", "libxcomposite1", "libxinerama1", "libxss1", "libxcb-image0", "libxcb-keysyms1", "libxcb-render-util0", "libxcb-xkb1", "libxcb-xinput0", "libxcb-xinerama0", "libxkbcommon0", "libxkbcommon-x11-0", "libxcb-icccm4", "libx11-6", "libgl1-mesa-dri", "qt5-default" ]
+      name: [ "direnv", "build-essential", "clang", "curl", "python3.10", "python3.10-venv", "libserialport-dev", "bison", "flex", "libreadline-dev", "gawk", "tcl-dev", "libffi-dev", "git", "mercurial", "graphviz", "xdot", "pkg-config", "libftdi-dev", "qt5-default", "python3-dev", "libboost-all-dev", "cmake", "libeigen3-dev", "bash", "tmux", "gtkwave", "udev", "xsel"]
+      state: present
+
+  - name: Install lattice radiant dependencies [1/3] 
+    ansible.builtin.apt:
+      name: [ "at-spi2-core", "libpangocairo-1.0-0", "libcairo2-dev", "pulseaudio", "libc6", "libjpeg-dev", "libieee1284-3", "libusb-0.1-4", "lsb-base", "libnss3", "libice6", "libgl1-mesa-glx", "libsm6", "libxt6", "libxext6", "libxrender1", "libxi6", "libxft2", "libxslt1.1", "libxrandr2", "libxfixes3"]
+      state: present
+      update_cache: yes
+
+
+  - name: Install lattice radiant dependencies [2/3]
+    ansible.builtin.apt:
+      name: [ "libxdamage1", "libxcursor1", "libxcomposite1", "libxinerama1", "libxss1", "libxcb-image0", "libxcb-keysyms1", "libxcb-render-util0", "libxcb-xkb1"]
+      state: present
+      update_cache: yes
+
+  - name: Install lattice radiant dependencies [3/3]
+    ansible.builtin.apt:
+      name: ["libxcb-xinput0", "libxcb-xinerama0", "libxkbcommon0", "libxkbcommon-x11-0", "libxcb-icccm4", "libx11-6", "libgl1-mesa-dri", "qt5-default" ]
       state: present
       update_cache: yes
 
@@ -42,11 +60,6 @@
     ansible.builtin.lineinfile:
       path: /home/{{ username }}/.bashrc
       line: 'PATH="~/lscc/radiant/2022.1/bin/lin64/${PATH:+:${PATH}}"'
-
-  - name: Install software dependencies
-    ansible.builtin.apt:
-      name: [ "direnv", "build-essential", "clang", "curl", "python3.10", "python3.10-venv", "libserialport-dev" ]
-      state: present
 
   - name: Add direnv shell hook
     ansible.builtin.lineinfile:

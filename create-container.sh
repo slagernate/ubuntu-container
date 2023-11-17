@@ -25,6 +25,6 @@ cat <<EOF > ./enter-container.sh
 #!/usr/bin/env bash
 xhost +local:
 sudo docker start "$container_name"
-sudo docker exec --user="$username" -it "$container_name" /bin/bash
+sudo docker exec --user="$username" -ite "TERM=xterm-256color" "$container_name" /bin/bash
 EOF
 chmod +x ./enter-container.sh
